@@ -25,11 +25,11 @@ const CampsiteInfoScreen = ({ route }) => {
       campsiteId: campsite.id,
     };
     dispatch(postComment(newComment));
-    setShowModal(false);
+    setShowModal(!showModal);
   };
 
   const resetForm = () => {
-    setRating(0);
+    setRating(5);
     setAuthor("");
     setText("");
   };
@@ -39,20 +39,14 @@ const CampsiteInfoScreen = ({ route }) => {
       <View style={styles.commentItem}>
         <Text style={{ fontSize: 14 }}>{item.text}</Text>
         <Rating
-          style={{
-            alignItems: "flex-start",
-            paddingVertical: "5%",
-            fontSize: 12,
-          }}
-          startingValue={rating}
+          startingValue={item.rating}
           imageSize={10}
           readonly
-        >
-          {item.rating}
-        </Rating>
-        <Text
-          style={{ fontSize: 12 }}
-        >{`-- ${item.author}, ${item.date}`}</Text>
+          style={{ alignItems: "flex-start", paddingVertical: "5%" }}
+        />
+        <Text style={{ fontSize: 12 }}>
+          {`-- ${item.author}, ${item.date}`}
+        </Text>
       </View>
     );
   };
@@ -86,53 +80,54 @@ const CampsiteInfoScreen = ({ route }) => {
         transparent={false}
         visible={showModal}
         onRequestClose={() => setShowModal(!showModal)}
-      />
-      <View style={styles.modal}>
-        <Rating
-          showRating
-          startingValue={rating}
-          imageSize={40}
-          onFinishRating={(rating) => setRating(rating)}
-          style={{ paddingVertical: 0 }}
-        />
+      >
+        <View style={styles.modal}>
+          <Rating
+            showRating
+            startingValue={rating}
+            imageSize={40}
+            onFinishRating={(rating) => setRating(rating)}
+            style={{ paddingVertical: 0 }}
+          />
 
-        <Input
-          placeholder="Author"
-          leftIcon={{ type: "font-awesome", name: "user-o" }}
-          leftIconContainerStyle={{ paddingRight: 10 }}
-          onChangeText={(text) => setText(text)}
-          value={author}
-        />
+          <Input
+            placeholder="Author"
+            leftIcon={{ type: "font-awesome", name: "user-o" }}
+            leftIconContainerStyle={{ paddingRight: 10 }}
+            onChangeText={(text) => setText(text)}
+            value={author}
+          />
 
-        <Input
-          placeholder="Comment"
-          leftIcon={{ type: "font-awesome", name: "comment-o" }}
-          leftIconContainerStyle={{ paddingRight: 10 }}
-          onChangeText={(text) => setText(text)}
-          value={text}
-        />
+          <Input
+            placeholder="Comment"
+            leftIcon={{ type: "font-awesome", name: "comment-o" }}
+            leftIconContainerStyle={{ paddingRight: 10 }}
+            onChangeText={(text) => setText(text)}
+            value={text}
+          />
 
-        <View style={{ margin: 10 }}>
-          <Button
-            title="Submit"
-            color="#5637DD"
-            onPress={() => {
-              handleSubmit();
-              resetForm();
-            }}
-          ></Button>
+          <View style={{ margin: 10 }}>
+            <Button
+              title="Submit"
+              color="#5637DD"
+              onPress={() => {
+                handleSubmit();
+                resetForm();
+              }}
+            />
+          </View>
+          <View style={{ margin: 5 }}>
+            <Button
+              onPress={() => {
+                setShowModal(!showModal);
+                resetForm();
+              }}
+              color="#808080"
+              title="Cancel"
+            />
+          </View>
         </View>
-        <View style={{ margin: 5 }}>
-          <Button
-            onPress={() => {
-              setShowModal(false);
-              resetForm();
-            }}
-            color="#808080"
-            title="Cancel"
-          ></Button>
-        </View>
-      </View>
+      </Modal>
     </Animatable.View>
   );
 };

@@ -9,7 +9,8 @@ const RenderCampsite = (props) => {
 
   const view = useRef();
 
-  const isLeftSwipe = ({ dx }) => dx < -200;
+  const isLeftSwipe = ({ dx }) => dx < -100;
+  const isRightSwipe = ({ dx }) => dx > 100;
 
   const panResponder = PanResponder.create({
     onStartShouldSetPanResponder: () => true,
@@ -42,6 +43,8 @@ const RenderCampsite = (props) => {
           ],
           { cancelable: false }
         );
+      } else if (isRightSwipe(gestureState)) {
+        props.onShowModal();
       }
     },
   });
